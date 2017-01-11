@@ -1,0 +1,18 @@
+<?php
+require 'conexion.php';
+$pdo = getPdo();
+$query = 'select count(*) from usuarios where usuario = ? and contra = ?';
+$n = 'jimmy';
+$c = 'jimmy';
+$ps = $pdo->prepare($query);
+$ps->bindParam(1, $n);
+$ps->bindParam(2, md5($c));
+$ps->execute();
+echo $ps->fetchColumn();
+
+$q  = 'select r.id, c.id, d.calle as calle from clientes as c join domicilios as d on c.domicilio = d.id';
+$ps = $pdo->prepare($q);
+$ps->execute();
+var_dump($ps->fetch(PDO::FETCH_ASSOC));
+
+?>

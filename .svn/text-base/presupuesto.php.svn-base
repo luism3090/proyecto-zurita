@@ -1,0 +1,107 @@
+<?php
+require_once 'recursos.php';
+require_once 'seguridad.php';
+checkPoint();
+
+$id = $_GET['id'];
+$back = $_GET['back'];
+?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php echo etq_meta(); ?>
+		<?php echo etq_css(); ?>
+		<?php echo etq_js(); ?>
+		<title></title>
+		<script type="text/javascript" src="js/bootstrap-affix.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('title').text('Gestionar presupuesto');
+				var back = <?php echo $back; ?>;
+				$('#btn_back').attr('href', 'man_obra.php?id=' + back);
+
+				var vid = <?php echo $id; ?>;
+				var cfg = {
+					id: vid
+				}
+				$.getJSON('presupuesto_ctrl.php', cfg, function(json){
+					//
+					$('#obra').text(json.pres.obra_str);
+					$('#elaboro').text(json.pres.elaboro_str);
+					if (json.pres.autorizo_str) {
+						$('#autorizo').text(json.pres.autorizo_str);
+					}else{
+						$('#autorizo').text('No autorizado');
+					}
+
+					$('#no_materiales').text(json.no_materiales);
+					var $f = $('#fila');
+					var $fs = $('#filas');
+					$.each(json.materiales, function(idx, val){
+						var $fc = $f.clone().removeClass('template');
+						$fc.children().each(function(cidx){
+							if (!$(this).hasClass('no')){
+								var pos = $(this).text();
+								$(this).text(val[pos]);
+							}
+
+						});
+						$fs.append($fc);
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<?php echo head_seg(); ?>
+		<div id="messages">
+		</div>
+		<div class="container">
+			<div>
+				<a id="btn_back" class="btn" href="#"><i class="icon-arrow-left"></i> Regresar</a>
+				<p></p>
+			</div>
+			<div class="row">
+				<div class="span12">Obra: <span id="obra"></span></div>
+			</div>
+			<div class="row">
+				<div class="span12">Elaboro: <span id="elaboro"></span></div>
+			</div>
+			<div class="row">
+				<div class="span12">Autorizo: <span id="autorizo"></span></div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<h1>Presupuesto <small>materiales</small></h1>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>Codigo</th>
+								<th>Nombre</th>
+								<th>Unidad de medida</th>
+								<th>Cantidad</th>
+								<th>Precio</th>
+								<th>Total</th>
+								<th colspan="2" class="tiny"><button id="btn_add" class="btn"><i class="icon-plus"></i></button></th>
+							</tr>
+						</thead>
+						<tbody id="filas">
+						</tbody>
+						<tr id="fila" class="template">
+							<td>codigo</td>
+							<td>nombre</td>
+							<td>udm_str</td>
+							<td>cantidad</td>
+							<td>precio</td>
+							<td>total</td>
+							<td class="tiny no"><button id="btn_modify" class="btn"><i class="icon-edit"></i></button></td>
+							<td class="tiny no"><button id="btn_remove" class="btn"><i class="icon-remove"></i></button></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<?php echo foot_seg(); ?>
+	</body>
+</html>

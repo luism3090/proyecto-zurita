@@ -1,0 +1,21 @@
+<?php
+# Algo para la seguridad
+?>
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<?php echo etq_meta(); ?>
+		<?php echo etq_css(); ?>
+		<?php echo etq_js(); ?>
+		<script type="text/javascript">
+			// codigo js
+		</script>
+		<title></title>
+	</head>
+	<body>
+		<div class="header"><?php echo gen_header(); ?></div>
+		<div class="content">
+		</div>
+		<div class="footer"><?php echo gen_footer(); ?></div>
+	</body>
+</html>

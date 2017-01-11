@@ -1,0 +1,179 @@
+<?php
+require_once 'recursos.php';
+require_once 'seguridad.php';
+checkPoint();
+
+#Datos
+$page = 'Usuarios';
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php echo etq_meta(); ?>
+		<?php echo etq_css(); ?>
+		<?php echo etq_js(); ?>
+		<title><?php echo $page; ?></title>
+		<script type="text/javascript" src="js/slides.jquery.js"></script>
+		<script type="text/javascript">
+
+			var cfg = {
+				fields: ['id', 'nombre', 'apellido', 'usuario'],
+				render: ['id', 'nombre', 'apellido', 'usuario']
+			}
+
+			function estado(activo){
+				if (activo){
+					$('#pform').find('#fields').removeAttr('disabled');
+				} else {
+					$('#pform').find('#fields').attr('disabled', 'true');
+				}
+			}
+
+			function limpiar(){
+				var $pform = $('#pform');
+				// Datos
+				$pform.find('#id').val(null);
+				$pform.find('#nombre').val(null);
+				$pform.find('#apellido').val(null);
+				$pform.find('#usuario').val(null);
+			}
+
+			function insertar(){
+				limpiar();
+				estado(true);
+				showForm('Nuevo usuario', 'Crear');
+			}
+
+			function editar($trid){
+				limpiar();
+				estado(true);
+				var $pform = $('#pform');
+				for (var i = 0; i < cfg.fields.length; i++){
+					$pform.find('#'+cfg.fields[i]).val(cfg.fields[i]);
+				}
+				showForm('Eliminar usuario', 'Editar');
+			}
+
+			function borrar($trid){
+				limpiar();
+				estado(false);
+				showForm('Eliminar usuario', 'Eliminar');
+			}
+
+			function sendForm(){
+				window.console.log('send form');
+				$('#pform').submit(function(){
+					var opts = {
+						target: '#messages',
+						success: updateTable,
+						dataType: json,
+						clearForm: true
+					};
+					$(this).ajaxSubmit(opts);
+
+					// Avoid resend
+					return false;
+				});
+
+			}
+
+			function updateTable(){
+				$('#mform').modal('close');
+
+				var $r = $('#fila');
+				$('#fila').remove();
+
+				$.getJSON('usuarios_ctrl.php', {tipo: 'select'}, function(json){
+					var $rs =$('#filas');
+					$.each(json, function(index, value) {
+						var $rc = $r.clone();
+						$rc.children().each(function(idx){
+							// alert(idx + ' ' + $(this).text());
+							var pos = $(this).text();
+							if (value.length != 0 && value[pos]){
+								window.console.log(pos + ' found');
+								$(this).text(value[pos]);
+							}
+						});
+						var rid = value.id;
+						$rc.find('#btn_update').attr('onclick', 'editar('+rid+')');
+						$rc.find('#btn_delete').attr('onclick', 'borrar('+rid+')');
+						$rs.append($rc);
+					});
+				});
+			}
+
+			$(document).ready(function(){
+				// Codigo
+				updateTable();
+
+				$('#btn_insert').bind('click', insertar);
+				$('#btn_action').bind('click', sendForm);
+
+			});
+
+			function showForm(titulo, boton){
+				var $form = $('#mform');
+				$form.find('#titulo').text(titulo);
+				$form.find('#btn_action').text(boton);
+				$form.modal('show');
+			}
+		</script>
+	</head>
+	<body>
+		<?php echo head_seg(); ?>
+		<div id="message">
+		</div>
+		<div class="container">
+			<h1>Usuarios</h1>
+			<div>
+				<!--<a data-target="#form" role="button" class="btn" data-toggle="modal"><i class="icon-plus"></i>Nuevo</a> -->
+			</div>
+			<table class="table table-bordered"> <!--" table-condensed">-->
+				<thead>
+					<tr >
+						<th>Id</th>
+						<th>Usuario</th>
+						<th>Nombre</th>
+						<th>Apellido</th>
+						<th colspan="2" class="tiny"><button id="btn_insert" data-target="#form" class="btn"><i class="icon-plus"></i></button></th>
+					</tr>
+				</thead>
+				<tbody id="filas">
+					<tr id="fila">
+						<td>id</td>
+						<td>usuario</td>
+						<td>nombre</td>
+						<td>apellido</td>
+						<td class="tiny"><button class="btn" type="button" id="btn_update" ><i class="icon-pencil"></i></button></td>
+						<td class="tiny"><button class="btn" type="button" id="btn_delete" ><i class="icon-remove"></i></button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="mform" class="modal hide fade" data-backdrop="static">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 id="titulo">Usuario</h3>
+			</div>
+			<div class="modal-body">
+				<form id="pform" name="pform" method="post" action="usuarios_ctrl.php" >
+					<fieldset id="fields" >
+						<input id="tipo" name="tipo" type="hidden"  value=""/>
+						<input id="where" name="where" type="hidden"  value=""/>
+						<!-- form -->
+						<label for="id">Id<input id="id" name="id" type="text" value=""/></label>
+						<label for="usuario">Usuario<input id="usuario" name="usuario" type="text" value=""/></label>
+						<label for="nombre">Nombre<input id="nombre" name="nombre" type="text" value=""/></label>
+						<label for="apellido">Apellido<input id="apellido" name="apellido" type="text" value=""/></label>
+					</fieldset>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn" data-dismiss="modal">Cancelar</button>
+				<button id="btn_action" type="button" class="btn btn-primary"></button>
+			</div>
+		</div>
+		<?php echo foot_seg(); ?>
+	</body>
+</html>

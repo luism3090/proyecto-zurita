@@ -1,0 +1,27 @@
+<?php
+require_once 'recursos.php';
+require_once 'seguridad.php';
+checkPoint();
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php echo etq_meta(); ?>
+		<?php echo etq_css(); ?>
+		<?php echo etq_js(); ?>
+		<title>Home</title>
+		<script type="text/javascript" src="js/slides.jquery.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// Codigo
+			});
+		</script>
+	</head>
+	<body>
+		<?php echo head_seg(); ?>
+		<div class="container">
+			<h1></h1>
+		</div>
+		<?php echo foot_seg(); ?>
+	</body>
+</html>

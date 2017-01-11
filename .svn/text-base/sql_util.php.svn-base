@@ -1,0 +1,187 @@
+<?php
+
+function vwhere($cond, $fields = 'none') {
+	$w = '';
+	if (is_array($cond)) {
+		if (is_int($cond[0]) and is_array($fields)) {
+			$w .= $fields[$cond[0]];
+		} else { // Es cadena
+			$w .= $cond[0];
+		}
+		$w .= ' ' . $cond[1] . ' ?';
+	} else {
+		if (is_array($fields) and is_int($cond)) {
+			$w .= $fields[$cond] . ' = ?';
+		} else {
+			$w .= ' ' . $cond . ' ';
+		}
+	}
+	return $w;
+}
+
+function where($conds, $fields = 'none') {
+	$w = ' WHERE ';
+	if (is_array($conds)) {
+		foreach ($conds as $cond) {
+			$w .= vwhere($cond, $fields);
+		}
+	} else {
+		$w .= vwhere($conds, $fields);
+	}
+	return $w;
+}
+
+function build_wheres($wheres) {
+	if (is_array($wheres)) {
+		$r = array();
+		for ($i = 0, $lim = count($wheres), $last = $lim - 1; $i < $lim; $i++) {
+			$r[] = array($wheres[$i], ' = ');
+			if ($i < $last) {
+				$r[] = 'and';
+			}
+		}
+		return $r;
+	} else {
+		return array(array($wheres, '='));
+	}
+}
+
+function join_fields($fields){
+	$q = '';
+	for($i = 0, $lim = count($fields), $last = $lim - 1; $i < $lim; $i++){
+		$q .= $fields[$i];
+		if ($i < $last){
+			$q .= ', ';
+		}
+	}
+	return $q;
+}
+
+function str_query($table, $fields, $strpos) {
+	$q = 'SELECT ';
+	for ($i = 0, $lim = count($fields), $last = $lim - 1; $i < $lim; $i++) {
+		$q .= $fields[$i] . ', ';
+	}
+	$q .= ' CONCAT(';
+	for ($i = 0, $lim = count($strpos), $last = $lim - 1; $i < $lim; $i++) {
+		$q .= $fields[$strpos[$i]];
+		if ($i < $last) {
+			$q .= ", ' * ', ";
+		}
+	}
+	$q .= ') AS strid FROM ' . $table;
+	error_log($q);
+	return $q;
+}
+
+function query($table, $ids = '*', $fields = 'all', $wids = 'none') {
+	$q = "SELECT ";
+	if (is_array($fields) and $ids == 'all') {
+		if (!is_array($ids)) {
+			$ids = range(0, count($fields) - 1);
+		}
+		for ($i = 0, $lim = count($ids), $last = $lim - 1; $i < $lim; $i++) {
+			$q .= $fields[$ids[$i]];
+			if ($i < $last) {
+				$q .= ', ';
+			}
+		}
+	} else if ($ids == 'count') {
+		$q .= 'COUNT(*)';
+	} else if ($ids == '*') {
+		$q .= '*';
+	}
+	$q .= ' FROM ' . $table;
+	if ($wids != 'none') {
+		$q .= where($wids, $fields);
+	}
+	error_log($q);
+	return $q;
+}
+
+function update($table, $fields, $conds = 'none', $sets = 'none') {
+	$q = "UPDATE " . $table . ' SET ';
+	if ($sets == 'none') {
+		$sets = range(0, count($fields) - 1);
+	}
+	for ($i = 0, $lim = count($sets), $last = $lim - 1; $i < $lim; $i++) {
+		$q .= $fields[$sets[$i]] . ' = ?';
+		if ($i < $last) {
+			$q .= ', ';
+		}
+	}
+	if ($conds != 'none') {
+		$q .= where($conds, $fields);
+	}
+	error_log($q);
+	return $q;
+}
+
+function insert($table, $fields) {
+	$q = 'INSERT INTO ' . $table;
+	$pd = '(';
+	$pp = '(';
+	for ($i = 0, $lim = count($fields), $last = $lim - 1; $i < $lim; $i++) {
+		$pd .= $fields[$i];
+		$pp .= '?';
+		if ($i < $last) {
+			$pd .= ', ';
+			$pp .= ', ';
+		}
+	}
+	$pd .= ')';
+	$pp .= ')';
+	$q .= $pd . ' VALUES ' . $pp;
+	error_log($q);
+	return $q;
+}
+
+function delete($table, $fields, $conds = 'none'){
+	$q = 'DELETE FROM ' . $table;
+	if ($fields != 'none'){
+		$q .= where($conds, $fields);
+	}
+	error_log($q);
+	return $q;
+}
+
+function sBind(&$ps, &$data, $names = 'none', $pos = 'none') {
+	$i = 1;
+	if ($names != 'none') {
+		foreach ($names as $name) {
+			$ps->bindParam($i++, $data[$name]);
+		}
+	} else if ($names != 'none' and $pos != 'none') {
+		foreach ($pos as $idx) {
+			$ps->bindParam($i++, $data[$names[$idx]]);
+		}
+	}
+}
+
+function xBind(&$ps, &$data, $names, $pos = 'none', $where = 'none') {
+	$i = 1;
+	if ($pos == 'none') { // Por nombres
+		if (is_array($names)) {
+			foreach ($names as $name) {
+				$ps->bindParam($i++, $data[$name]);
+			}
+		} else {
+			$ps->bindParam($i++, $data[$names]);
+		}
+	} else { // por posiciones sobre el nombre
+		foreach ($pos as $idx) {
+			$ps->bindParam($i++, $data[$names[$idx]]);
+		}
+	}
+	if ($where != 'none') {
+		foreach ($where as $w) {
+			if (is_int($w)) {
+				$ps->bindParam($i++, $data[$names[$w]]);
+			} else {
+				$ps->bindParam($i++, $data[$w]);
+			}
+		}
+	}
+}
+
+?>

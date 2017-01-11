@@ -1,0 +1,69 @@
+<?php
+
+require_once 'conexion.php';
+require_once 'sql_util.php';
+
+$pdo = getPdo();
+if (isset($_GET['ftype'])) {
+	if ($_GET['ftype'] == 'select') {
+		$fields = array('o.id',
+			'o.nombre',
+			'o.descripcion',
+			'o.cliente',
+			"concat(c.nombre,' * ',c.apellidop, ' * ', c.rfc ) as cliente_str",
+			'o.tipo',
+			'ot.nombre as tipo_str',
+			'o.estado'
+		);
+		$q = 'select ' . join_fields($fields) . ' from obras as o left join clientes as c on o.cliente = c.id ' .
+				'left join obra_tipos as ot on o.tipo = ot.id';
+		if (isset($_GET['id'])) {
+			$q .= ' where o.id = ?';
+			// $q = query('clientes', '*', 'all', array(array('id', '=')));
+			$ps = $pdo->prepare($q);
+			$ps->bindParam(1, $_GET['id']);
+			$ps->execute();
+			$rows = $ps->fetch(PDO::FETCH_ASSOC);
+		} else {
+			// $q = query('clientes');
+			$q .= ' order by o.id';
+			$ps = $pdo->prepare($q);
+			$ps->execute();
+			$rows = $ps->fetchAll(PDO::FETCH_ASSOC);
+		}
+		error_log('Query select done: ' . $q);
+		header('Content-Type: text/javascript');
+		echo json_encode($rows);
+	}
+} else {
+	if (isset($_POST['ftype'])) {
+		if ($_POST['ftype'] == 'update') {
+			$sets = split(',', $_POST['update']);
+			$whs = split(',', $_POST['where']);
+			$q = update('obras', $sets, build_wheres($whs));
+			$ps = $pdo->prepare($q);
+			xBind($ps, $_POST, $sets, 'none', $whs);
+			$ps->execute();
+		} else if ($_POST['ftype'] == 'insert') {
+			$ins = split(',', $_POST['insert']);
+			$q = insert('obras', $ins);
+			$ps = $pdo->prepare($q);
+			sBind($ps, $_POST, $ins);
+			$ps->execute();
+		} else if ($_POST['ftype'] == 'delete') {
+			$fds = split(',', $_POST['update']);
+			$whs = split(',', $_POST['where']);
+			$q = delete('obras', $fds, build_wheres($whs));
+			$ps = $pdo->prepare($q);
+			sBind($ps, $_POST, $whs);
+			$ps->execute();
+		}
+		header('Content-Type: text/javascript');
+		echo(json_encode('Ok'));
+	} else {
+		$error = array('error' => 'Error', 'message' => 'Bad request');
+		header('Content-Type: text/javascript');
+		echo json_encode($error);
+	}
+}
+?>

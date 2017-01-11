@@ -1,0 +1,13 @@
+<?php
+
+function getPdo() {
+	try {
+		return new PDO('mysql:host=localhost;dbname=zurita', 'root', 'l.juji9',
+						array(PDO::ATTR_PERSISTENT => true));
+	} catch (PDOException $ex) {
+		error_log($ex);
+		exit($ex);
+	}
+}
+
+?>

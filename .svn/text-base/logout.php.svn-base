@@ -1,0 +1,8 @@
+<?php
+
+require_once 'seguridad.php';
+checkPoint();
+
+session_destroy();
+header('Location: index.php');
+?>

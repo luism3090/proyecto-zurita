@@ -1,0 +1,257 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/svn/kdev/!svn/ver/5/trunk
+END
+obras_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/kdev/!svn/ver/4/trunk/obras_ctrl.php
+END
+clientes_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/kdev/!svn/ver/4/trunk/clientes_ctrl.php
+END
+domicilios.php
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/kdev/!svn/ver/3/trunk/domicilios.php
+END
+sql_util.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/3/trunk/sql_util.php
+END
+udms_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/kdev/!svn/ver/4/trunk/udms_ctrl.php
+END
+empleados_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/kdev/!svn/ver/3/trunk/empleados_ctrl.php
+END
+material.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/5/trunk/material.php
+END
+presupuesto.php
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/kdev/!svn/ver/5/trunk/presupuesto.php
+END
+man_obra_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/kdev/!svn/ver/5/trunk/man_obra_ctrl.php
+END
+login.php
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/kdev/!svn/ver/2/trunk/login.php
+END
+logout.php
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/kdev/!svn/ver/3/trunk/logout.php
+END
+empleados.php
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/kdev/!svn/ver/3/trunk/empleados.php
+END
+materiales_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/kdev/!svn/ver/4/trunk/materiales_ctrl.php
+END
+usuarios.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/3/trunk/usuarios.php
+END
+test.php
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/kdev/!svn/ver/3/trunk/test.php
+END
+conexion.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/2/trunk/conexion.php
+END
+presupuesto_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/kdev/!svn/ver/5/trunk/presupuesto_ctrl.php
+END
+usuario.php
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/kdev/!svn/ver/5/trunk/usuario.php
+END
+otipo.php
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/kdev/!svn/ver/5/trunk/otipo.php
+END
+categoria.php
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/kdev/!svn/ver/3/trunk/categoria.php
+END
+usuarios_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/kdev/!svn/ver/3/trunk/usuarios_ctrl.php
+END
+otipos_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/kdev/!svn/ver/5/trunk/otipos_ctrl.php
+END
+usuarios_xps.php
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/kdev/!svn/ver/3/trunk/usuarios_xps.php
+END
+categorias_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/kdev/!svn/ver/3/trunk/categorias_ctrl.php
+END
+recursos.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/5/trunk/recursos.php
+END
+obras.php
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/kdev/!svn/ver/5/trunk/obras.php
+END
+clientes.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/3/trunk/clientes.php
+END
+seguridad.php
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/kdev/!svn/ver/2/trunk/seguridad.php
+END
+index.php
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/kdev/!svn/ver/2/trunk/index.php
+END
+udms.php
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/kdev/!svn/ver/4/trunk/udms.php
+END
+domicilio.php
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/kdev/!svn/ver/3/trunk/domicilio.php
+END
+template.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/2/trunk/template.php
+END
+otipos.php
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/kdev/!svn/ver/4/trunk/otipos.php
+END
+man_obra.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/5/trunk/man_obra.php
+END
+domicilios_ctrl.php
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/kdev/!svn/ver/3/trunk/domicilios_ctrl.php
+END
+categorias.php
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/kdev/!svn/ver/3/trunk/categorias.php
+END
+obra.php
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/kdev/!svn/ver/5/trunk/obra.php
+END
+cliente.php
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/kdev/!svn/ver/3/trunk/cliente.php
+END
+udm.php
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/kdev/!svn/ver/5/trunk/udm.php
+END
+materiales.php
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/kdev/!svn/ver/4/trunk/materiales.php
+END
+empleado.php
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/kdev/!svn/ver/3/trunk/empleado.php
+END
+home.php
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/kdev/!svn/ver/2/trunk/home.php
+END

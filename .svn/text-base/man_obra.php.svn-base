@@ -1,0 +1,232 @@
+<?php
+require_once 'recursos.php';
+require_once 'seguridad.php';
+checkPoint();
+
+$id = $_GET['id'];
+?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php echo etq_meta(); ?>
+		<?php echo etq_css(); ?>
+		<?php echo etq_js(); ?>
+		<title></title>
+		<script type="text/javascript" src="js/bootstrap-affix.js"></script>
+		<script type="text/javascript">
+			function showTipo(){
+				var cfg = {
+					ftype: 'xselect',
+					fields: 'id,nombre',
+					fsrt: '1'
+				};
+				$.getJSON('otipos_ctrl.php', cfg, function(json){
+					var $dlg = $('#frm_tipo');
+					var $fs = $dlg.find('#filas');
+					var $f = $dlg.find('#fila').remove();
+					$.each(json, function(idx, val){
+						var $fc = $f.clone();
+						$fc.children().each(function(idx){
+							if(!$(this).hasClass('no')){
+								var pos = $(this).text();
+								if (val[pos]) {
+									$(this).text(val[pos]);
+								}
+							}
+						});
+						$fc.find('#btn_ok').attr('onclick', 'setTipo('+val.id+',\''+val.strid+'\')');
+						$fs.append($fc);
+					});
+					$dlg.modal('show');
+				});
+			}
+
+			function setTipo(id, str){
+				$('#tipo').val(id);
+				$('#tipo_str').val(str);
+				$('#frm_tipo').modal('hide');
+			}
+
+			function showCliente(){
+				var cfg = {
+					ftype: 'xselect',
+					fields: 'id,nombre,apellidop,rfc,razon_social',
+					fsrt: '3,1,2'
+				};
+				$.getJSON('clientes_ctrl.php', cfg, function(json){
+					var $dlg = $('#frm_cliente');
+					var $fs = $dlg.find('#cfilas');
+					var $f = $dlg.find('#cfila').remove();
+					$.each(json, function(idx, val){
+						var $fc = $f.clone();
+						$fc.children().each(function(idx){
+							if(!$(this).hasClass('no')){
+								var pos = $(this).text();
+								if (val[pos]) {
+									$(this).text(val[pos]);
+								}
+							}
+						});
+						$fc.find('#cbtn_ok').attr('onclick', 'setCliente('+val.id+',\''+val.strid+'\')');
+						$fs.append($fc);
+					});
+					$dlg.modal('show');
+				});
+			}
+
+			function setCliente(id, str){
+				$('#cliente').val(id);
+				$('#cliente_str').val(str);
+				$('#frm_cliente').modal('hide');
+			}
+
+			$(document).ready(function(){
+				$('title').text('Gestionar obra');
+				var vid = <?php echo $id; ?>;
+				var cfg = {
+					id: vid
+				}
+				$.getJSON('man_obra_ctrl.php', cfg, function(json){
+					//
+					$('#nombre').text(json.obra.nombre);
+					$('#descripcion').text(json.obra.descripcion);
+					$('#cliente_str').text(json.obra.cliente_str);
+					$('#tipo_str').text(json.obra.tipo_str);
+					$('#estado').text(json.obra.estado);
+					$('#no_empleados').text(json.no_empleados);
+					$('#btn_empleados').attr('href', 'trabaja_en.php?id=' + json.obra.id)
+					$('#btn_presupuesto').attr('href', 'presupuesto.php?id=' + json.obra.id + '&back=' + vid);
+
+					// Empleados
+					var $efila = $('#efila');
+					var $ces = $('#efilas');
+					$.each(json.empleados, function(idx, val){
+						var $fc = $efila.clone().removeClass('template');
+						$fc.children().each(function(cidx){
+							if (!$(this).hasClass('no')){
+								var pos = $(this).text();
+								$(this).text(val[pos]);
+							}
+						});
+						$ces.append($fc);
+					});
+
+					//
+					var $pfila = $('#pfila');
+					var $cps = $('#pfilas');
+					var total = 0;
+					$.each(json.materiales, function(id, val){
+						var $fc = $pfila.clone().removeClass('template');
+						$fc.children().each(function(pidx){
+							if (!$(this).hasClass('no')){
+								var pos = $(this).text();
+								$(this).text(val[pos]);
+							}
+						});
+						total += (val.total ? +val.total : 0);
+						$cps.append($fc);
+					});
+					$('#bg_total').text(total);
+					$('#td_total').text(total);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<?php echo head_seg(); ?>
+		<div id="messages">
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<h1 id="nombre">Nombre de la obra</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<h4 id="descripcion">Descripcion que hace si le pones mas texto del que puede contener al punto de abarcar mucho, mucho, y mucho mas del disponible</h4>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="span6">
+					Cliente: <span id="cliente_str">Nombre del dichoso cliente</span>
+				</div>
+				<div class="span3">
+					Tipo de proyecto: <span id="tipo_str">El tipo del proyecto</span>
+				</div>
+				<div class="span3">
+					Estado: <span id="estado">Estado</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<ul class="nav nav-tabs">
+						<li><a href="#empleados" data-toggle="tab">Empleados <span id="no_empleados" class="badge badge-info">1</span></a></li>
+						<li><a href="#presupuesto" data-toggle="tab">Presupuesto <span id="bg_total" class="badge badge-info">1</span></a></li>
+					</ul>
+					<div id="tab-content" class="tab-content">
+						<section class="tab-pane fade in active" id="empleados">
+							<h1>Empleados <small>asignados</small></h1>
+							<a id="btn_empleados" href="#" class="btn btn-primary">Modificar</a>
+							<p></p>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Titulo</th>
+										<th>Nombre</th>
+										<th>Apellido P.</th>
+										<th>Apellido M.</th>
+									</tr>
+								</thead>
+								<tbody id="efilas">
+								</tbody>
+								<tr id="efila" class="template">
+									<td>titulo</td>
+									<td>nombre</td>
+									<td>apellidop</td>
+									<td>apellidom</td>
+								</tr>
+							</table>
+						</section>
+						<section class="tab-pane fade" id="presupuesto">
+							<h1>Presupuesto <small>calculado</small></h1>
+							<a id="btn_presupuesto" href="#" class="btn btn-primary">Modificar</a>
+							<p></p>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Código</th>
+										<th>Material</th>
+										<th>Categoria</th>
+										<th>Cantidad</th>
+										<th>Unidades</th>
+										<th>Precio</th>
+										<th>Total</th>
+									</tr>
+								</thead>
+								<tbody id="pfilas">
+								</tbody>
+								<tr>
+									<td colspan="6" class="text-right">Total</td>
+									<td id="td_total"></td>
+								</tr>
+								<tr id="pfila" class="template">
+									<td>codigo</td>
+									<td>material</td>
+									<td>categoria_str</td>
+									<td>cantidad</td>
+									<td>udm_str</td>
+									<td>precio</td>
+									<td>total</td>
+								</tr>
+							</table>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php echo foot_seg(); ?>
+	</body>
+</html>

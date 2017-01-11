@@ -1,0 +1,113 @@
+<?php
+require_once 'recursos.php';
+require_once 'seguridad.php';
+checkPoint();
+
+#Datos
+$fallback = 'otipos.php';
+if (isset($_GET['do'])) {
+	$do = $_GET['do'];
+	$page = gen_page($do, 'tipo de obra');
+	$id = $do == 'insert' ? 'false' : $_GET['id'];
+	$disable = $do == 'delete' ? 'true' : 'false';
+} else {
+	header('Location: ' . $fallback);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php echo etq_meta(); ?>
+		<?php echo etq_css(); ?>
+		<?php echo etq_js(); ?>
+		<title><?php echo $page; ?></title>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				//
+				var title = '<?php echo $page ?>';
+				var vid = <?php echo $id; ?>;
+				var dis = <?php echo $disable; ?>;
+				//
+				var back = '<?php echo $fallback; ?>';
+				$('title').text(title);
+				$('#htitle').text(title);
+				$('#btn_do').text(title);
+				$('#btn_cancel').attr('href', back);
+				//
+				$('#ftype').val('<?php echo $do; ?>');
+
+				if(dis){
+					$('#fields').attr('disabled', 'true');
+				}
+
+				//
+				if (vid){
+					$.getJSON('otipos_ctrl.php', {ftype: 'select', id: vid}, function(json){
+						$('#id').val(json.id);
+						$('#nombre').val(json.nombre);
+						/**
+						$('#tipo').children().filter(function() {
+							return $(this).attr('value') == json.tipo;
+						}).attr('selected', true);**/
+
+					});
+				}
+
+
+				$('#frm').submit(function(){
+					var opts = {
+						target: '#messages',
+						url: 'otipos_ctrl.php',
+						beforeSubmit: function(){
+							// Do validate
+						},
+						success: function(json){
+							// Do funny stuff
+							window.location.href = back;
+						},
+						dataType: 'json',
+						clearForm: true
+					};
+					$(this).ajaxSubmit(opts);
+
+					// Avoid resend
+					return false;
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<?php echo head_seg(); ?>
+		<div id="messages">
+		</div>
+		<div class="container">
+			<h1 id="htitle"></h1>
+			<form id="frm" name="myfrm" method="post" class="form-horizontal">
+				<input id="update" name="update" type="hidden" value="nombre"/>
+				<input id="insert" name="insert" type="hidden" value="nombre"/>
+				<input id="where" name="where" type="hidden" value="id"/>
+				<input id="ftype" name="ftype" type="hidden" />
+				<fieldset id="fields">
+					<div class="control-group">
+						<label class="control-label" for="id">Id</label>
+						<div class="controls">
+							<input id="id" name="id" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="nombre">Nombre</label>
+						<div class="controls">
+							<input id="nombre" name="nombre" type="text" value="" />
+						</div>
+					</div>
+				</fieldset>
+				<div class="controls">
+					<a id="btn_cancel" class="btn" >Cancelar</a>
+					<button id="btn_do" class="btn btn-primary" type="submit"></button>
+				</div>
+			</form>
+		</div>
+		<?php echo foot_seg(); ?>
+	</body>
+</html>

@@ -1,0 +1,163 @@
+<?php
+require_once 'recursos.php';
+require_once 'seguridad.php';
+checkPoint();
+
+#Datos
+$fallback = 'domicilios.php';
+if (isset($_GET['do'])) {
+	$do = $_GET['do'];
+	$page = gen_page($do, 'domicilio');
+	$id = $do == 'insert' ? 'false' : $_GET['id'];
+	$disable = $do == 'delete' ? 'true' : 'false';
+} else {
+	header('Location: ' . $fallback);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php echo etq_meta(); ?>
+		<?php echo etq_css(); ?>
+		<?php echo etq_js(); ?>
+		<title><?php echo $page; ?></title>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				//
+				var title = '<?php echo $page ?>';
+				var vid = <?php echo $id; ?>;
+				var dis = <?php echo $disable; ?>;
+				//
+				var back = '<?php echo $fallback; ?>';
+				$('#htitle').text(title);
+				$('#btn_do').text(title);
+				$('#btn_cancel').attr('href', back);
+				//
+				$('#tipo').val('<?php echo $do; ?>');
+
+				if(dis){
+					$('#fields').attr('disabled', 'true');
+				}
+
+				//
+				if (vid){
+					$.getJSON('domicilios_ctrl.php', {ftype: 'select', id: vid}, function(json){
+						$('#id').val(json.id);
+						$('#calle').val(json.calle);
+						$('#calle2').val(json.calle2);
+						$('#numero').val(json.numero);
+						$('#colonia').val(json.colonia);
+						$('#ciudad').val(json.ciudad);
+						$('#municipio').val(json.municipio);
+						$('#estado').val(json.estado);
+						$('#pais').val(json.pais);
+						$('#referencia').val(json.referencia);
+					});
+				}
+
+
+				$('#frm').submit(function(){
+					var opts = {
+						target: '#messages',
+						url: 'domicilios_ctrl.php',
+						beforeSubmit: function(){
+							// Do validate
+						},
+						success: function(json){
+							// Do funny stuff
+							window.location.href = back;
+						},
+						dataType: 'json',
+						clearForm: true
+					};
+					$(this).ajaxSubmit(opts);
+
+					// Avoid resend
+					return false;
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<?php echo head_seg(); ?>
+		<div id="messages">
+		</div>
+		<div class="container">
+			<h1 id="htitle"></h1>
+			<form id="frm" name="myfrm" method="post" class="form-horizontal">
+				<input id="update" name="update" type="hidden" value="calle,calle2,numero,colonia,ciudad,municipio,estado,pais,referencia"/>
+				<input id="insert" name="insert" type="hidden" value="calle,calle2,numero,colonia,ciudad,municipio,estado,pais,referencia"/>
+				<input id="where" name="where" type="hidden" value="id"/>
+				<input id="tipo" name="ftype" type="hidden" />
+				<fieldset id="fields">
+					<div class="control-group">
+						<label class="control-label" for="id">Id</label>
+						<div class="controls">
+							<input id="id" name="id" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="calle">Calle</label>
+						<div class="controls">
+							<input id="calle" name="calle" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="calle2">Avenida</label>
+						<div class="controls">
+							<input id="calle2" name="calle2" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="numero">Número</label>
+						<div class="controls">
+							<input id="numero" name="numero" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="colonia">Colonia</label>
+						<div class="controls">
+							<input id="colonia" name="colonia" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="ciudad">Ciudad</label>
+						<div class="controls">
+							<input id="ciudad" name="ciudad" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="municipio">Municipio</label>
+						<div class="controls">
+							<input id="municipio" name="municipio" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="estado">Estado</label>
+						<div class="controls">
+							<input id="estado" name="estado" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="pais">Pais</label>
+						<div class="controls">
+							<input id="pais" name="pais" type="text" value="" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="referencia">Referencia</label>
+						<div class="controls">
+							<input id="referencia" name="referencia" type="text" value="" />
+						</div>
+					</div>
+				</fieldset>
+				<div class="controls">
+					<a id="btn_cancel" class="btn" >Cancelar</a>
+					<button id="btn_do" class="btn btn-primary" type="submit"></button>
+				</div>
+			</form>
+		</div>
+		<?php echo foot_seg(); ?>
+	</body>
+</html>

@@ -1,0 +1,89 @@
+<?php
+require_once 'recursos.php';
+require_once 'seguridad.php';
+checkPoint();
+
+#Datos
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<?php echo etq_meta(); ?>
+		<?php echo etq_css(); ?>
+		<?php echo etq_js(); ?>
+		<title></title>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// Codigo
+				var page = 'Clientes';
+				$('title').text(page);
+				$('#page').text(page);
+				var des = 'cliente.php'
+				$('#btn_insert').attr('href', des + '?do=insert');
+				//
+				var $r =$('#fila');
+				$('#fila').remove();
+
+				$.getJSON('clientes_ctrl.php', {ftype: 'select'}, function(json){
+					var $rs =$('#filas');
+					$.each(json, function(index, value) {
+						var $rc = $r.clone();
+						$rc.children().each(function(idx){
+							if (!$(this).hasClass('no')){
+								var pos = $(this).text();
+								if (value[pos]){
+									$(this).text(value[pos]);
+								} else {
+									$(this).text(null);
+								}
+							}
+						});
+						var rid = value.id;
+						$rc.find('#btn_update').attr('href', des+'?id='+rid+'&do=update');
+						$rc.find('#btn_delete').attr('href', des+'?id='+rid+'&do=delete');
+						$rs.append($rc);
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<?php echo head_seg(); ?>
+		<div class="container">
+			<h1 id="page"></h1>
+			<div>
+				<!--<a data-target="#form" role="button" class="btn" data-toggle="modal"><i class="icon-plus"></i>Nuevo</a> -->
+			</div>
+			<table class="table table-bordered"> <!--" table-condensed">-->
+				<thead>
+					<tr >
+						<th>Id</th>
+						<th>Titulo</th>
+						<th>Nombre</th>
+						<th>Apellido paterno</th>
+						<th>Apellido materno</th>
+						<th>Razon social</th>
+						<th>R.F.C.</th>
+						<th>Domicilio</th>
+						<th colspan="2" class="tiny"><a href="#" class="btn" id="btn_insert" ><i class="icon-plus"></i></a></th>
+					</tr>
+				</thead>
+				<tbody id="filas">
+					<tr id="fila">
+						<td>id</td>
+						<td>titulo</td>
+						<td>nombre</td>
+						<td>apellidop</td>
+						<td>apellidom</td>
+						<td>razon_social</td>
+						<td>rfc</td>
+						<td>domicilio_str</td>
+						<td class="no tiny"><a class="btn" id="btn_update" ><i class="icon-pencil"></i></a></td>
+						<td class="no tiny"><a class="btn" id="btn_delete" ><i class="icon-remove"></i></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<?php echo foot_seg(); ?>
+	</body>
+</html>

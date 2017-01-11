@@ -1,0 +1,44 @@
+<?php
+
+require_once 'conexion.php';
+require_once 'seguridad.php';
+require_once 'sql_util.php';
+// checkPoint();
+
+if (isset($_POST['usuario']) and isset($_POST['contra'])) {
+	$pdo = getPdo();
+
+	$q = query('usuarios', 'count', array('usuario', 'contra'), $wids = array(0, 'and', 1));
+	$ps = $pdo->prepare($q);
+	$ps->bindParam(1, $_POST['usuario']);
+	$ps->bindParam(2, md5($_POST['contra']));
+	$ps->execute();
+
+	$rc = intval($ps->fetchColumn());
+	$ps->closeCursor();
+
+	error_log('Records found: ' . $rc);
+	if ($rc > 0) {
+		session_start();
+		$_SESSION['id'] = uniqid();
+
+		$qd = query('usuarios', 'all', array('id', 'nombre', 'apellido'), array(array('usuario', '='), 'and', array('contra', '=')));
+		$psd = $pdo->prepare($qd);
+		$psd->bindParam(1, $_POST['usuario']);
+		$psd->bindParam(2, md5($_POST['contra']));
+		$psd->execute();
+		$row = $psd->fetch(PDO::FETCH_ASSOC);
+		$psd->closeCursor();
+
+		$_SESSION['uid'] = $row['id'];
+		$_SESSION['usuario'] = $row['nombre'] . ' ' . $row['apellido'];
+		header('Location: home.php');
+		exit;
+	} else {
+		header('Location: index.php?error=2');
+		exit;
+	}
+}
+header('Location: index.php?error=1');
+exit;
+?>

@@ -1,0 +1,62 @@
+<?php
+
+require_once 'conexion.php';
+require_once 'sql_util.php';
+
+$pdo = getPdo();
+if (isset($_GET['ftype'])) {
+	if ($_GET['ftype'] == 'select') {
+		if (isset($_GET['id'])) {
+			$q = query('domicilios', '*', 'all', array(array('id', '=')));
+			$ps = $pdo->prepare($q);
+			$ps->bindParam(1, $_GET['id']);
+			$ps->execute();
+			$rows = $ps->fetch(PDO::FETCH_ASSOC);
+		} else {
+			$q = query('domicilios');
+			$ps = $pdo->prepare($q);
+			$ps->execute();
+			$rows = $ps->fetchAll(PDO::FETCH_ASSOC);
+		}
+		header('Content-Type: text/javascript');
+		echo json_encode($rows);
+	} else if ($_GET['ftype'] == 'xselect') {
+		$xq = str_query('domicilios', split(',', $_GET['fields']), split(',', $_GET['fsrt']));
+		$ps = $pdo->prepare($xq);
+		$ps->execute();
+		$rows = $ps->fetchAll(PDO::FETCH_ASSOC);
+		header('Content-Type: text/javascript');
+		echo json_encode($rows);
+	}
+} else {
+	if (isset($_POST['ftype'])) {
+		if ($_POST['ftype'] == 'update') {
+			$sets = split(',', $_POST['update']);
+			$whs = split(',', $_POST['where']);
+			$q = update('domicilios', $sets, build_wheres($whs));
+			$ps = $pdo->prepare($q);
+			xBind($ps, $_POST, $sets, 'none', $whs);
+			$ps->execute();
+		} else if ($_POST['ftype'] == 'insert') {
+			$ins = split(',', $_POST['insert']);
+			$q = insert('domicilios', $ins);
+			$ps = $pdo->prepare($q);
+			sBind($ps, $_POST, $ins);
+			$ps->execute();
+		} else if ($_POST['ftype'] == 'delete') {
+			$fds = split(',', $_POST['update']);
+			$whs = split(',', $_POST['where']);
+			$q = delete('domicilios', $fds, build_wheres($whs));
+			$ps = $pdo->prepare($q);
+			sBind($ps, $_POST, $whs);
+			$ps->execute();
+		}
+		header('Content-Type: text/javascript');
+		echo(json_encode('Ok'));
+	} else {
+		$error = array('error' => 'Error', 'message' => 'Bad request');
+		header('Content-Type: text/javascript');
+		echo json_encode($error);
+	}
+}
+?>

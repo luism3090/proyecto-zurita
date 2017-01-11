@@ -1,0 +1,331 @@
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot?lwp98k');
+	src:url('fonts/icomoon.eot?#iefixlwp98k') format('embedded-opentype'),
+		url('fonts/icomoon.woff?lwp98k') format('woff'),
+		url('fonts/icomoon.ttf?lwp98k') format('truetype'),
+		url('fonts/icomoon.svg?lwp98k#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
+
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+
+footer {
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	background-color: black;
+	color: gray;
+	text-align: center;
+}
+
+/* Slides */
+#slides {
+	width: 800px;
+	z-index: 100;
+}
+
+.slides_container {
+	position: relative;
+	width: 800px;
+}
+
+.slides_container div.slide {
+	width: 800px;
+	height: 200px;
+	display: block;
+}
+
+.pagination {
+	position: absolute;
+	bottom: 0px;
+	right: 10px;
+	z-index: 501;
+}
+
+.pagination li {
+	float: left;
+	margin: 0 1px;
+	list-style:none;
+}
+
+.pagination li a {
+	display: block;
+	width: 12px;
+	height: 0;
+	padding-top: 12px;
+	background-image: url('../img/pagination.png');
+	background-position: 0 0;
+	float: left;
+	overflow: hidden;
+}
+
+.pagination li.current a {
+	background-position:0 -12px;
+}
+
+.caption {
+	z-index:500;
+	position:absolute;
+	bottom:-35px;
+	left:0;
+	height:30px;
+	padding:5px 20px 0 20px;
+	background:#000;
+	background:rgba(0,0,0,.5);
+	width: 100%;
+	font-size:1.3em;
+	line-height:1.33;
+	color:#fff;
+	border-top:1px solid #000;
+	text-shadow:none;
+}
+
+div.slide img {
+	width: 800px;
+	height: 200px;
+}
+
+/** onda de las tablas **/
+td.tiny, th.tiny {
+	padding: 4px;
+	width: 42px;
+	text-align: center;
+}
+
+.template {
+	display: none;
+}
+
+#menuSuperior
+{
+	display: none;
+}
+#btn-clientes, #btn-invantario, #btn-obras
+{
+	border-color: transparent;
+	background: #000 url(../img/arrow.png);
+	background-position: 60px center;
+	background-size: 15px 15px;
+    background-repeat: no-repeat;
+    padding-right: 1.8em;
+    color: #AAA;
+}
+#btn-invantario
+{
+	background-position: 75px center;
+	padding-right: 1.7em;
+}
+#btn-clientes
+{
+	background: #000;
+	padding-right: 1em;
+}
+#btn-obras
+{
+	background-position: 50px center;
+	padding-right: 1.3em;
+}
+#form-cliente
+{
+	display: none;
+	text-align: center;
+	margin-bottom:3em; 
+}
+#clientes-tabla
+{
+	margin: 0 3em;
+	display: none;
+}
+#form-tabla
+{
+	margin: 0 auto;
+	border-collapse: separate;
+  	border-spacing:  40px 40px;
+}
+#materiales-tabla
+{
+	margin: 0 6em;
+	display: none;
+}
+#form-materiales
+{
+	display: none;
+}
+#form-materiales > div
+{
+	text-align: center;
+}
+#unidad_medida-tabla
+{
+	margin: 0 6em;
+	display: none;
+}
+#form-unidad_medida
+{
+	display: none;
+}
+#form-unidad_medida > div
+{
+	text-align: center;
+}
+
+#jefe_obra-tabla
+{
+	margin: 0 3em;
+	display: none;
+}
+#form-jefe_obra
+{
+	display: none;
+}
+#form-jefe_obra > div
+{
+	text-align: center;
+}
+
+#tipo_obra-tabla
+{
+	margin: 0 3em;
+	display: none;
+}
+#form-tipo_obra
+{
+	display: none;
+}
+#form-tipo_obra > div
+{
+	text-align: center;
+}
+
+#crear_obra-tabla
+{
+	margin: 0 3em;
+	display: none;
+}
+#form-crear_obra
+{
+	display: none;
+}
+#form-crear_obra > div
+{
+	text-align: center;
+}
+.icon-user:before {
+	content: "\e600";
+}
+
+.icon-pencil:before {
+	content: "\e905";
+}
+
+.icon-switch:before {
+	content: "\e9b6";
+}
+
+.icon-cross:before {
+	content: "\ea0f";
+}
+#detallesLogin
+{
+	display: inline-block;
+	position: absolute;
+	right: 100px;
+	color: white;
+	top: 10px;
+}
+#detallesLogin>*
+{
+	cursor: pointer;
+}
+#detallesLogin>p
+{
+	display: inline-block;
+	color: #AAA;
+}
+#detallesLogin>span:nth-child(1)
+{
+	margin-right: 0.5em;
+}
+#detallesLogin>span:nth-child(3)
+{
+	margin-left: 3em;
+}
+table>tbody>tr>td, table>thead>tr>th
+{
+	text-align: center !important;
+}
+#form-tipo-obra
+{
+	display: none;
+        width:300px;
+        margin:0px auto;
+}
+
+#form-tipo-obra > div, #form-tipo-obra > h3
+{
+	text-align: center;
+}
+#seguimientoObra
+{
+	display: none;
+}
+#seguimientoObra>#headerSeguimiento
+{
+	margin-bottom: 3em;
+}
+#seguimientoObra>#headerSeguimiento>p
+{
+	text-align: center;
+	font-size: 1.3em;
+}
+#seguimientoObra>.contenedorSeguimiento
+{
+	text-align: center;
+	margin: 5em;
+	margin-bottom: 2em;
+	padding: 2em 1em;
+	background-color: #F2F2F2;
+	border-radius: 20px;
+	box-shadow: 5px 5px 5px #EEE;
+}
+#seguimientoObra label
+{
+	display: inline-block;
+	width: 200px;
+}
+#seguimientoObra>.contenedorSeguimiento>p:nth-child(1)
+{
+	font-size: 1.3em;
+	margin-top: -0.5em;
+	margin-bottom: 1.5em;
+}
+
+.mensage  // Luis 4
+{
+	border:dashed 1px red;
+	background-color:#FFC6C7;
+	color: #000000;
+	padding: 10px;
+	text-align: left;
+	margin: 10px auto; 
+	display: none; //Al cargar el documento el contenido del mensaje debe estar oculto
+}

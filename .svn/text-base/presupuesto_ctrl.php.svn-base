@@ -1,0 +1,50 @@
+<?php
+
+require_once 'conexion.php';
+require_once 'sql_util.php';
+
+$pdo = getPdo();
+if (isset($_GET['id'])) {
+	// Informacion del presupuesto
+	$fs = array('p.id',
+		"case when p.elaboro is null then '' else concat(ue.nombre, ' * ', ue.apellido) end as elaboro_str",
+		"case when p.autorizo is null then '' else concat(ua.nombre, ' * ', ua.apellido) end as autorizo_str",
+	);
+	$qd = 'SELECT ' .join_fields($fs) . ' FROM presupuestos as p left join usuarios as ue on p.elaboro = ue.id '.
+			'left join usuarios as ua on p.autorizo = ua.id '.
+			'where p.id = ?';
+	error_log('Quere press: ' . $qd);
+	$pqd = $pdo->prepare($qd);
+	$pqd->bindParam(1, $_GET['id']);
+	$pqd->execute();
+	$rp = $pqd->fetch(PDO::FETCH_ASSOC);
+
+	// Detalles
+	$fs = array('c.id as cid',
+		'm.id as mid',
+		'm.codigo',
+		'm.nombre',
+		'cat.nombre as categoria_str',
+		'm.venta',
+		'u.nombre as udm_str',
+		'c.precio',
+		'c.cantidad',
+		'(c.precio * c.cantidad) as total'
+	);
+	$qp = 'SELECT ' . join_fields($fs) . ' FROM materiales as m join categorias as cat on m.categoria = cat.id ' .
+			'join udms as u on m.udm = u.id ' .
+			'join contiene as c on m.id = c.material ' .
+			'where c.presupuesto = ?';
+	error_log('Query presupuesto: ' . $qp);
+	$ps = $pdo->prepare($qp);
+	$ps->bindParam(1, $_GET['id']);
+	$ps->execute();
+	$mats = $ps->fetchAll(PDO::FETCH_ASSOC);
+
+	// Resultados
+	$res = array('pres' => $rp);
+	$res['materiales'] = $mats;
+	header('Content-Type: text/javascript');
+	echo json_encode($res);
+}
+?>
